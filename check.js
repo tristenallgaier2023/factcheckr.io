@@ -22,8 +22,13 @@ async function check() {
     } else { // Regular text.
         console.log(`Checking \"${input_string}\"`);
 
-        // The key should be placed somewhere else later
-        let api_key = 'AIzaSyCz7xKnP_rVlK8mhVMaA3wvYnd4L9ziHVM';
+        // The key should be hosted in a local nodejs server
+        let api_key;
+        let contents = await fetch('http://127.0.0.1:3000/')
+        .then(response => response.text())
+        .then(data => {
+            api_key = data;
+        });
     
         // Setup the Fetch GET Request with the appropriate headers and URL
         let response = await fetch(`https://factchecktools.googleapis.com/v1alpha1/claims:search?query=${input_string}&key=${api_key}`, {
