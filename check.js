@@ -1,5 +1,5 @@
 async function check() {
-    let input_string = document.getElementById("input_link").value;
+    let input_string = document.getElementById("input_string").value;
 
     // Perform article content web scraping.
     if (isValidHttpUrl(input_string)) {
@@ -35,7 +35,7 @@ async function check() {
         });
     }
     // Clear input value.
-    document.getElementById("input_link").value = ''
+    document.getElementById("input_string").value = ''
 }
 
 function isValidHttpUrl(string) {
