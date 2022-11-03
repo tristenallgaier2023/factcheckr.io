@@ -22,12 +22,12 @@ async function check() {
     } else { // Regular text.
         console.log(`Checking \"${input_string}\"`);
 
-        // The key should be hosted in a local nodejs server
+        // The keys should be hosted in a local nodejs server
         let api_key;
         let contents = await fetch('http://127.0.0.1:3000/')
         .then(response => response.text())
         .then(data => {
-            api_key = data;
+            api_key = JSON.parse(data).google;
         });
     
         // Setup the Fetch GET Request with the appropriate headers and URL
