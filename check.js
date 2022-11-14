@@ -107,12 +107,12 @@ async function check() {
           )
           .then((response) => response.json())
           .then((data) => {
-              console.log(data)
-              let rating = "NaN"
-              if (data && Object.keys(data).length === 0 && Object.getPrototypeOf(data) === Object.prototype) {
-                  rating = processClaim(data)
-              }
-              console.log("This claim is", Math.floor(rating * 100), "% truthful.")
+              displaySimilarClaims(data);
+              // let rating = "NaN"
+              // if (data && Object.keys(data).length === 0 && Object.getPrototypeOf(data) === Object.prototype) {
+              //     rating = processClaim(data)
+              // }
+              // console.log("This claim is", Math.floor(rating * 100), "% truthful.")
           });
   }
   // Clear input value.
@@ -127,6 +127,35 @@ function isValidHttpUrl(string) {
       return false;
   }
   return url.protocol === "http:" || url.protocol === "https:";
+}
+
+function displaySimilarClaims(data) {
+  console.log(data);
+  document.getElementById("similar").innerHTML = '';
+
+  if (Object.keys(data).length === 0) {
+    const noSimilarClaimsDiv = document.createElement("div");
+    noSimilarClaimsDiv.innerHTML = `No results`;
+    document.getElementById("similar").append(noSimilarClaimsDiv);
+    return;
+  }
+
+  let similarClaimsDiv;
+  for (let i = 0; i < data.claims.length; i++) {
+    similarClaimsDiv = document.createElement("div");
+
+    similarClaimsDiv.innerHTML = `
+    <div class="card">
+      <div class="card-header">
+        ${data.claims[i].text}
+      </div>
+      <div class="card-body text-secondary bg-secondary bg-opacity-10">
+        <p class="card-text">${data.claims[0].claimReview[0].textualRating}</p>
+      </div>
+    </div>`
+  
+    document.getElementById("similar").append(similarClaimsDiv)
+  }
 }
 
 function displayClaim(claimText, claimRating) {
