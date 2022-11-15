@@ -1,7 +1,7 @@
 async function check() {
   let input_string = document.getElementById("input_string").value;
   var text;
-  var thresh_hold = 0.5;
+  var headline;
 
   document.getElementById("similar").innerHTML = '';
 
@@ -24,12 +24,16 @@ async function check() {
           )
           .then((response) => response.json())
           .then((response) => {
-              console.log("Article Title:\n" + response.article.title);
-              console.log("Article Author:\n" + response.article.author);
+              // console.log("Article Title:\n" + response.article.title);
+              // console.log("Article Author:\n" + response.article.author);
               // console.log("Article Text:\n" + response.article.text);
               text = response.article.text;
+              headline = response.article.title;
           })
           .catch((err) => console.error(err));
+
+      // Check headline
+      await checkSingleClaim(headline, true, "headline");
 
       // Extract verifiable claims;
       let url = `https://idir.uta.edu/claimbuster/api/v2/score/text/sentences/${text}`;
@@ -38,20 +42,26 @@ async function check() {
           headers: {
               "x-api-key": claimbusterKey,
           },
-      });
+      })
+      .catch((err) => displayError());
       let res = await response.json();
       let allClaims = res.results;
       for (let i = 0; i < allClaims.length; i++) {
-          if (allClaims[i].score >= thresh_hold) {
-              checkSingleClaim(allClaims[i].text);
-          }
+          checkSingleClaim(allClaims[i].text, false, "text");
       }
   } else {
       // Regular text.
-      checkSingleClaim(input_string);
+      checkSingleClaim(input_string, true, "custom");
   }
   // Clear input value.
   document.getElementById("input_string").value = "";
+}
+
+function displayError() {
+  const errorDiv = document.createElement("div");
+  errorDiv.innerHTML = `
+  <div class='error'>Failed to load article text</div>`;
+  document.getElementById("similar").append(errorDiv);
 }
 
 function isValidHttpUrl(string) {
@@ -75,7 +85,7 @@ async function getKey(keyName) {
   return api_key;
 }
 
-async function checkSingleClaim(claim) {
+async function checkSingleClaim(claim, showIfNoResults, claimType) {
   let api_key = await getKey("google");
 
   let response = await fetch(
@@ -85,17 +95,19 @@ async function checkSingleClaim(claim) {
       )
       .then((response) => response.json())
       .then((data) => {
-          displaySimilarClaims(claim, data);
+          if (Object.keys(data).length !== 0 || showIfNoResults) {
+            displaySimilarClaims(claim, data, claimType);
+          }
       });
 }
 
-function displaySimilarClaims(claim, data) {
-  console.log(claim);
-  console.log(data);
+function displaySimilarClaims(claim, data, claimType) {
+  // console.log(claim);
+  // console.log(data);
 
   const claimDiv = document.createElement("div");
   claimDiv.innerHTML = `
-  <h3>Checking claim:</h3>
+  <h3>Checking ${claimType} claim:</h3>
   <h4>${claim}</h4>`;
   document.getElementById("similar").append(claimDiv);
 
