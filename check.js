@@ -63,6 +63,7 @@ function displayError() {
   errorDiv.innerHTML = `
   <div class='error'>Failed to load article text</div>`;
   document.getElementById("similar").append(errorDiv);
+  document.getElementById("spinner").style.display = "none";
 }
 
 function isValidHttpUrl(string) {
