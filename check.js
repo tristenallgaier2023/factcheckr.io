@@ -4,7 +4,7 @@ async function check() {
   var headline;
 
   document.getElementById("similar").innerHTML = '';
-
+  document.getElementById("spinner").style.display = "inline-block";
   if (isValidHttpUrl(input_string)) {
       const rapidApiKey = await getKey("rapidApiKey");
       const rapidApiHost = await getKey("rapidApiHost");
@@ -55,6 +55,7 @@ async function check() {
   }
   // Clear input value.
   document.getElementById("input_string").value = "";
+  document.getElementById("spinner").style.display = "none";
 }
 
 function displayError() {
