@@ -5,6 +5,11 @@ async function check() {
 
   document.getElementById("similar").innerHTML = '';
 
+  var notice = document.getElementById("notice");
+  if (notice != null) {
+    document.getElementById("notice").remove();
+  }
+
   document.getElementById("article-descriptor").classList.add("d-none")
   document.getElementById("article-descriptor").classList.remove("d-flex")
   document.getElementById("article-display").classList.add("d-none")
@@ -52,9 +57,7 @@ async function check() {
               },
           }).then((response) => response.json())
           .then((res) => {
-            console.log(res)
             let allClaims = res.results;
-            console.log(allClaims)
             for (let i = 0; i < allClaims.length; i++) {
                 $("#collapseArticle").html(function() {
                     return $(this).html().replace(allClaims[i].text, `<span class = "bg-success text-light colorblock">${allClaims[i].text}</span>`);
@@ -74,10 +77,10 @@ async function check() {
   document.getElementById("article-descriptor").classList.add("d-flex")
   document.getElementById("article-display").classList.remove("d-none")
   document.getElementById("second-hr").style.display = "block"
-  document.getElementById("similar").insertAdjacentHTML('beforeend', `<p class="text-muted mt-4" id = "notice"><i>NOTE: If an identified claim does not appear above, it means that our knowledges bases did not return any related sources.</i></p>`)
+  document.getElementById("similar").insertAdjacentHTML('afterend', `<p class="text-muted mt-4" id = "notice"><i>NOTE: If an identified claim does not appear above, it means that our knowledges bases did not return any debunked claims from verified sources.</i></p>`)
   document.getElementById("similar").style.display = "block"
 
-  document.getElementById("article-descriptor").scrollIntoView();
+  document.getElementById("first-hr").scrollIntoView();
   // Clear input value.
   document.getElementById("input_string").value = "";
   document.getElementById("spinner").style.display = "none";
@@ -148,12 +151,17 @@ function displaySimilarClaims(claim, data, claimType) {
       similarClaimsDiv = document.createElement("div");
 
       similarClaimsDiv.innerHTML = `
-  <div class="card">
-    <div class="card-header">
-      ${data.claims[i].text}
+  <div class="card mb-4">
+    <div class="card-header text-secondary">
+      Debunked related claim
     </div>
-    <div class="card-body text-secondary bg-secondary bg-opacity-10">
-      <p class="card-text">${data.claims[i].claimReview[0].textualRating}</p>
+    <div class="card-body text-secondary">
+      <p class="card-text">${data.claims[i].text}</p>
+      <p class="card-text" style = "margin: 0">Claimed by <span class = "text-body" style = "font-weight: 500;">${data.claims[i].claimant}</span></p>
+    </div>
+    <div class="card-footer text-secondary d-flex justify-content-between">
+      <p class="card-text" style = "margin: 0">Truthfulness Rating: <span class = "text-body" style = "font-weight: 500;">${data.claims[i].claimReview[0].textualRating}</span></p>
+      <a href="${data.claims[i].claimReview[0].url}" class="card-link">Source: ${data.claims[i].claimReview[0].publisher.name}</a>
     </div>
   </div>`;
 
