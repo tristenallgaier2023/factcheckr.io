@@ -157,7 +157,6 @@ function displaySimilarClaims(claim, data, claimType) {
     </div>
     <div class="card-body text-secondary">
       <p class="card-text">${data.claims[i].text}</p>
-      <p class="card-text" style = "margin: 0">Claimed by <span class = "text-body" style = "font-weight: 500;">${data.claims[i].claimant}</span></p>
     </div>
     <div class="card-footer text-secondary d-flex justify-content-between">
       <p class="card-text" style = "margin: 0">Truthfulness Rating: <span class = "text-body" style = "font-weight: 500;">${data.claims[i].claimReview[0].textualRating}</span></p>
