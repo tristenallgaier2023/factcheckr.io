@@ -2,11 +2,13 @@
     padding-left: 0;
     list-style: none;
 }
+
 .icon-list li {
     display: flex;
     align-items: flex-start;
     margin-bottom: .25rem;
 }
+
 .icon-list li::before {
     display: block;
     flex-shrink: 0;
@@ -25,40 +27,40 @@
     color: red;
 }
 
-  .module .collapse, .module .collapsing {
+.module .collapse,
+.module .collapsing {
     height: 3rem;
-  }
-  
-  .module .collapse {
+}
+
+.module .collapse {
     position: relative;
     display: block;
     overflow: hidden;
-  }
-  
-  .module .collapse:before {
+}
+
+.module .collapse:before {
     content: ' ...';
     position: absolute;
     right: 0;
     bottom: 0;
-  }
-  
-  .module .collapse.show {
-    height: auto;
-  }
-  
-  .module .collapse.show:before {
-    display: none;
-  }
-  
-  .module a.collapsed:after {
-    content: '+ Show More';
-  }
-  
-  .module a:not(.collapsed):after {
-    content: '- Show Less';
-  }
+}
 
-  .colorblock {
+.module .collapse.show {
+    height: auto;
+}
+
+.module .collapse.show:before {
+    display: none;
+}
+
+.module a.collapsed:after {
+    content: '+ Show More';
+}
+
+.module a:not(.collapsed):after {
+    content: '- Show Less';
+}
+
+.colorblock {
     padding: 4px;
-  }
-  
+}

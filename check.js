@@ -46,20 +46,20 @@ async function check() {
       // Extract verifiable claims;
       let url = `https://idir.uta.edu/claimbuster/api/v2/score/text/sentences/${text}`;
       let response = await fetch(url, {
-          method: "GET",
-          headers: {
-              "x-api-key": claimbusterKey,
-          },
-      })
-      .catch((err) => displayError());
+              method: "GET",
+              headers: {
+                  "x-api-key": claimbusterKey,
+              },
+          })
+          .catch((err) => displayError());
       let res = await response.json();
       let allClaims = res.results;
       for (let i = 0; i < allClaims.length; i++) {
-        $("#collapseArticle").html(function () {
-          return $(this).html().replace(allClaims[i].text, `<span class = "bg-success text-light colorblock">${allClaims[i].text}</span>`); 
-       });
+          $("#collapseArticle").html(function() {
+              return $(this).html().replace(allClaims[i].text, `<span class = "bg-success text-light colorblock">${allClaims[i].text}</span>`);
+          });
           checkSingleClaim(allClaims[i].text, false, "text");
-          }
+      }
   } else {
       // Regular text.
       checkSingleClaim(input_string, true, "custom");
@@ -69,6 +69,7 @@ async function check() {
   document.getElementById("article-descriptor").classList.add("d-flex")
   document.getElementById("article-display").classList.remove("d-none")
   document.getElementById("second-hr").style.display = "block"
+  document.getElementById("similar").insertAdjacentHTML('beforeend', `<p class="text-muted mt-4" id = "notice"><i>NOTE: If an identified claim does not appear above, it means that our knowledges bases did not return any related sources.</i></p>`)
   document.getElementById("similar").style.display = "block"
 
   document.getElementById("article-descriptor").scrollIntoView();
@@ -80,7 +81,7 @@ async function check() {
 function displayError() {
   const errorDiv = document.createElement("div");
   errorDiv.innerHTML = `
-  <div class='error'>Failed to load article text</div>`;
+<div class='error'>Failed to load article text</div>`;
   document.getElementById("similar").append(errorDiv);
   document.getElementById("spinner").style.display = "none";
 }
@@ -117,7 +118,7 @@ async function checkSingleClaim(claim, showIfNoResults, claimType) {
       .then((response) => response.json())
       .then((data) => {
           if (Object.keys(data).length !== 0 || showIfNoResults) {
-            displaySimilarClaims(claim, data, claimType);
+              displaySimilarClaims(claim, data, claimType);
           }
       });
 }
@@ -125,33 +126,33 @@ async function checkSingleClaim(claim, showIfNoResults, claimType) {
 function displaySimilarClaims(claim, data, claimType) {
   const claimDiv = document.createElement("div");
   claimDiv.innerHTML = `
-  <h3>Checking ${claimType} claim:</h3>
-  <h4>${claim}</h4>`;
+<h4>Checking ${claimType} claim:</h4>
+<h5 class = "text-muted">${claim}</h5>`;
   document.getElementById("similar").append(claimDiv);
 
 
   if (Object.keys(data).length === 0) {
-    const noSimilarClaimsDiv = document.createElement("div");
-    noSimilarClaimsDiv.innerHTML = `No results`;
-    document.getElementById("similar").append(noSimilarClaimsDiv);
-    return;
+      const noSimilarClaimsDiv = document.createElement("div");
+      noSimilarClaimsDiv.innerHTML = `No results`;
+      document.getElementById("similar").append(noSimilarClaimsDiv);
+      return;
   }
 
   let similarClaimsDiv;
   for (let i = 0; i < data.claims.length; i++) {
-    similarClaimsDiv = document.createElement("div");
+      similarClaimsDiv = document.createElement("div");
 
-    similarClaimsDiv.innerHTML = `
-    <div class="card">
-      <div class="card-header">
-        ${data.claims[i].text}
-      </div>
-      <div class="card-body text-secondary bg-secondary bg-opacity-10">
-        <p class="card-text">${data.claims[i].claimReview[0].textualRating}</p>
-      </div>
-    </div>`;
-    
-    document.getElementById("similar").append(similarClaimsDiv);
+      similarClaimsDiv.innerHTML = `
+  <div class="card">
+    <div class="card-header">
+      ${data.claims[i].text}
+    </div>
+    <div class="card-body text-secondary bg-secondary bg-opacity-10">
+      <p class="card-text">${data.claims[i].claimReview[0].textualRating}</p>
+    </div>
+  </div>`;
+
+      document.getElementById("similar").append(similarClaimsDiv);
   }
 }
 
