@@ -50,16 +50,21 @@ async function check() {
               headers: {
                   "x-api-key": claimbusterKey,
               },
-          })
-          .catch((err) => displayError());
-      let res = await response.json();
-      let allClaims = res.results;
-      for (let i = 0; i < allClaims.length; i++) {
-          $("#collapseArticle").html(function() {
-              return $(this).html().replace(allClaims[i].text, `<span class = "bg-success text-light colorblock">${allClaims[i].text}</span>`);
+          }).then((response) => response.json())
+          .then((res) => {
+            console.log(res)
+            let allClaims = res.results;
+            console.log(allClaims)
+            for (let i = 0; i < allClaims.length; i++) {
+                $("#collapseArticle").html(function() {
+                    return $(this).html().replace(allClaims[i].text, `<span class = "bg-success text-light colorblock">${allClaims[i].text}</span>`);
+                });
+                checkSingleClaim(allClaims[i].text, false, "text");
+            }
+          }).catch((err) => {
+            displayError()
+            console.log(err)
           });
-          checkSingleClaim(allClaims[i].text, false, "text");
-      }
   } else {
       // Regular text.
       checkSingleClaim(input_string, true, "custom");
@@ -81,7 +86,7 @@ async function check() {
 function displayError() {
   const errorDiv = document.createElement("div");
   errorDiv.innerHTML = `
-<div class='error'>Failed to load article text</div>`;
+<div class='error'>Failed to extract verifiable claims</div>`;
   document.getElementById("similar").append(errorDiv);
   document.getElementById("spinner").style.display = "none";
 }
