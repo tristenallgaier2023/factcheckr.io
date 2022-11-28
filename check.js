@@ -68,19 +68,23 @@ async function check() {
             displayError()
             console.log(err)
           });
+          document.getElementById("article-descriptor").classList.remove("d-none")
+          document.getElementById("article-descriptor").classList.add("d-flex")
+          document.getElementById("article-display").classList.remove("d-none")
+          document.getElementById("second-hr").style.display = "block"
+          document.getElementById("similar").insertAdjacentHTML('afterend', `<p class="text-muted mt-4" id = "notice"><i>NOTE: If an identified claim does not appear above, it means that our knowledges bases did not return any debunked claims from verified sources.</i></p>`)
+          document.getElementById("similar").style.display = "block"
+        
+          document.getElementById("first-hr").scrollIntoView();
   } else {
       // Regular text.
       checkSingleClaim(input_string, true, "custom");
+      document.getElementById("first-hr").style.display = "block"
+      document.getElementById("similar").style.display = "block"
+    
+      document.getElementById("first-hr").scrollIntoView();
   }
 
-  document.getElementById("article-descriptor").classList.remove("d-none")
-  document.getElementById("article-descriptor").classList.add("d-flex")
-  document.getElementById("article-display").classList.remove("d-none")
-  document.getElementById("second-hr").style.display = "block"
-  document.getElementById("similar").insertAdjacentHTML('afterend', `<p class="text-muted mt-4" id = "notice"><i>NOTE: If an identified claim does not appear above, it means that our knowledges bases did not return any debunked claims from verified sources.</i></p>`)
-  document.getElementById("similar").style.display = "block"
-
-  document.getElementById("first-hr").scrollIntoView();
   // Clear input value.
   document.getElementById("input_string").value = "";
   document.getElementById("spinner").style.display = "none";
