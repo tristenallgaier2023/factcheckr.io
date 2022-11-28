@@ -49,9 +49,8 @@
       <main>
         <h1>Paste a claim or link to start fact-checking</h1>
         <p class="fs-5 col-md-8">
-          This tool can be an incredibly helpful asset in evaluating the
-          validity of articles. Factcheckr.io supports checking of potential
-          fake news.
+          Factcheckr.io will automatically parse the contents of articles and identify verifiable claims.
+          These claims will be checked against our knowledge bases and their textual rating will then be displayed.
         </p>
         <div class="input-group mb-5" style="width: 80%">
           <input
@@ -71,28 +70,27 @@
             Submit
           </button>
         </div>
-        <hr class="col-3 col-md-2 mb-5 w-3" />
-        <div id = "similar"></div>
+        <hr class="col-3 col-md-2 mb-5 w-3" style = "display: none" id = "first-hr" />
+        <div class = "d-none justify-content-between" id = "article-descriptor">
+          <h4>Parsed Article Text from Link</h4>
+          <h4><span class = "bg-success text-light colorblock">Highlighted Text</span> = Identified Claims</h4>
+        </div>
+        <div class="d-none card" id = "article-display">
+          <div class="module card-body">
+            <h5 class="card-title" id = "article-headline">Article Headline</h3>
+            <h6 class="card-subtitle mb-2 text-muted" id = "article-author">Article Author</h6>
+            <p class="collapse card-text" id="collapseArticle" aria-expanded="false" style = "white-space: pre-wrap;">Article Body</p>
+         </div>
+         <div class="module card-footer" style = "text-align: center;">
+          <a role="button" class="collapsed" data-bs-toggle="collapse" href="#collapseArticle" 
+          aria-expanded="false" aria-controls="collapseArticle"></a>
+          </div>
+       </div>
+       <hr class="col-3 col-md-2 mt-5 mb-5 w-3" style = "display: none" id = "second-hr"/>
+
+        <div id = "similar" style = "display: none;"></div>
         <div class="spinner-border" role="status" id = "spinner" style = "display: none;">
           <span class="visually-hidden">Loading...</span>
-        </div>
-        <div class="row g-5">
-          <div class="col-md-6">
-            <h2>Examples of potential fake news</h2>
-            <p>
-              We use Google Fact Check API to find articles that debunk popular
-              false or misleading claims.
-            </p>
-            <ul class="icon-list">
-              <li class="text-muted">Trump won the 2020 election.</li>
-              <li class="text-muted">Wearing masks protects from Covid-19.</li>
-              <li class="text-muted">Joe Biden supports Putin.</li>
-              <li class="text-muted">Jeffrey Epstein didn't kill himself.</li>
-              <li class="text-muted">
-                Vaccines are effective at preventing Covid-19.
-              </li>
-            </ul>
-          </div>
         </div>
       </main>
       <footer class="pt-5 my-5 text-muted border-top">
@@ -105,6 +103,7 @@
       integrity="sha384-OERcA2EqjJCMA+/3y+gxIOqMEjwtxJY7qPCqsdltbNJuaOe923+mo//f6V8Qbsw3"
       crossorigin="anonymous"
     ></script>
+    <script src="https://code.jquery.com/jquery-3.6.1.min.js" integrity="sha256-o88AwQnZB+VDvE9tvIXrMQaPlFFSUTR+nldQm1LuPXQ=" crossorigin="anonymous"></script>
     <script src="check.js"></script>
   </body>
 </html>

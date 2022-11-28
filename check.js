@@ -4,7 +4,15 @@ async function check() {
   var headline;
 
   document.getElementById("similar").innerHTML = '';
+
+  document.getElementById("article-descriptor").classList.add("d-none")
+  document.getElementById("article-descriptor").classList.remove("d-flex")
+  document.getElementById("article-display").classList.add("d-none")
+  document.getElementById("second-hr").style.display = "none"
+  document.getElementById("similar").style.display = "none"
+
   document.getElementById("spinner").style.display = "inline-block";
+  document.getElementById("first-hr").style.display = 'block'
   if (isValidHttpUrl(input_string)) {
       const rapidApiKey = await getKey("rapidApiKey");
       const rapidApiHost = await getKey("rapidApiHost");
@@ -24,11 +32,11 @@ async function check() {
           )
           .then((response) => response.json())
           .then((response) => {
-              // console.log("Article Title:\n" + response.article.title);
-              // console.log("Article Author:\n" + response.article.author);
-              // console.log("Article Text:\n" + response.article.text);
               text = response.article.text;
               headline = response.article.title;
+              author = response.article.author
+              loadArticle(headline, author, text)
+
           })
           .catch((err) => console.error(err));
 
@@ -47,12 +55,23 @@ async function check() {
       let res = await response.json();
       let allClaims = res.results;
       for (let i = 0; i < allClaims.length; i++) {
+        $("#collapseArticle").html(function () {
+          return $(this).html().replace(allClaims[i].text, `<span class = "bg-success text-light colorblock">${allClaims[i].text}</span>`); 
+       });
           checkSingleClaim(allClaims[i].text, false, "text");
-      }
+          }
   } else {
       // Regular text.
       checkSingleClaim(input_string, true, "custom");
   }
+
+  document.getElementById("article-descriptor").classList.remove("d-none")
+  document.getElementById("article-descriptor").classList.add("d-flex")
+  document.getElementById("article-display").classList.remove("d-none")
+  document.getElementById("second-hr").style.display = "block"
+  document.getElementById("similar").style.display = "block"
+
+  document.getElementById("article-descriptor").scrollIntoView();
   // Clear input value.
   document.getElementById("input_string").value = "";
   document.getElementById("spinner").style.display = "none";
@@ -104,9 +123,6 @@ async function checkSingleClaim(claim, showIfNoResults, claimType) {
 }
 
 function displaySimilarClaims(claim, data, claimType) {
-  // console.log(claim);
-  // console.log(data);
-
   const claimDiv = document.createElement("div");
   claimDiv.innerHTML = `
   <h3>Checking ${claimType} claim:</h3>
@@ -131,10 +147,16 @@ function displaySimilarClaims(claim, data, claimType) {
         ${data.claims[i].text}
       </div>
       <div class="card-body text-secondary bg-secondary bg-opacity-10">
-        <p class="card-text">${data.claims[0].claimReview[0].textualRating}</p>
+        <p class="card-text">${data.claims[i].claimReview[0].textualRating}</p>
       </div>
     </div>`;
-  
+    
     document.getElementById("similar").append(similarClaimsDiv);
   }
+}
+
+function loadArticle(headline, author, body) {
+  document.getElementById("article-headline").textContent = headline
+  document.getElementById("article-author").textContent = author
+  document.getElementById("collapseArticle").textContent = body
 }
